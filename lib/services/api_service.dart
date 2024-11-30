@@ -43,6 +43,19 @@ class ApiService {
     }
   }
 
+  Future<List<dynamic>> fetchMovieVideos(int movieId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/movie/$movieId/videos?api_key=$TMDB_API_KEY&language=fr-FR'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['results'];
+    } else {
+      throw Exception('Erreur lors de la récupération des vidéos du film');
+    }
+  }
+
   Future<List<dynamic>> getGenreList() async {
     final response = await http.get(Uri.parse('$_baseUrl/genre/movie/list?api_key=$TMDB_API_KEY&language=fr-FR'));
 

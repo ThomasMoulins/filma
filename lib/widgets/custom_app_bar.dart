@@ -1,3 +1,4 @@
+// lib/widgets/custom_app_bar.dart
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -5,7 +6,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onCategorySelected;
   final TextEditingController searchController;
 
-  const CustomAppBar({super.key,
+  const CustomAppBar({
+    super.key,
     required this.onSearchChanged,
     required this.onCategorySelected,
     required this.searchController,
@@ -14,55 +16,69 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Row(
-        children: [
-          // Logo de l'application
-          Image.asset('assets/logo.png', height: 40),
-          const SizedBox(width: 10),
-          // Barre de recherche
-          Expanded(
-            child: TextField(
-              controller: searchController,
-              onChanged: (value) {
-                if (value.isNotEmpty) {
-                  onSearchChanged(value);
-                }
-              },
-              decoration: InputDecoration(
-                hintText: 'Rechercher des films...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    searchController.clear();
-                    onSearchChanged('');
-                  },
-                ),
-              ),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: Image.asset('assets/logo.png', height: 40),
+      ),
+      title: SizedBox(
+        height: 40,
+        child: TextField(
+          controller: searchController,
+          onChanged: (value) {
+            onSearchChanged(value);
+          },
+          decoration: InputDecoration(
+            hintText: 'Rechercher des films...',
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+            filled: true,
+            fillColor: Colors.grey[200],
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[400]!),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey[200]!),
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
-          const SizedBox(width: 10),
-          // Menu des catégories
-          PopupMenuButton<String>(
-            onSelected: onCategorySelected,
-            itemBuilder: (BuildContext context) {
-              return ['Action', 'Comédie', 'Drame'] // Liste des catégories
-                  .map((String category) {
-                return PopupMenuItem<String>(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList();
+        ),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.category, color: Colors.grey[700]),
+          onPressed: () {
+            _showCategoriesDialog(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  void _showCategoriesDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final categories = ['Action', 'Comédie', 'Drame']; // Liste des catégories
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: ListView.builder(
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(categories[index]),
+                onTap: () {
+                  onCategorySelected(categories[index]);
+                  Navigator.pop(context);
+                },
+              );
             },
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
