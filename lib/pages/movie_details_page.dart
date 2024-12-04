@@ -10,10 +10,10 @@ class MovieDetailsPage extends StatefulWidget {
   const MovieDetailsPage({super.key, required this.movie});
 
   @override
-  _MovieDetailsPageState createState() => _MovieDetailsPageState();
+  MovieDetailsPageState createState() => MovieDetailsPageState();
 }
 
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
+class MovieDetailsPageState extends State<MovieDetailsPage> {
   String _genres = 'Chargement...';
   YoutubePlayerController? _youtubeController;
   bool _isPlayerReady = false;
