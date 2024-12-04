@@ -56,12 +56,12 @@ class ApiService {
     }
   }
 
-  Future<List<dynamic>> getGenreList() async {
+  Future<List<Map<String, dynamic>>> getGenreList() async {
     final response = await http.get(Uri.parse('$_baseUrl/genre/movie/list?api_key=$TMDB_API_KEY&language=fr-FR'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['genres'];
+      return List<Map<String, dynamic>>.from(data['genres']);
     } else {
       throw Exception('Erreur lors de la récupération des genres');
     }
@@ -81,6 +81,18 @@ class ApiService {
       }
     } else {
       throw Exception('Erreur lors de la récupération des genres');
+    }
+  }
+
+  Future<List<Movie>> fetchMoviesByGenreId(int genreId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/discover/movie?api_key=$TMDB_API_KEY&language=fr-FR&with_genres=$genreId'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<Movie> movies = (data['results'] as List).map((movieJson) => Movie.fromJson(movieJson)).toList();
+      return movies;
+    } else {
+      throw Exception('Erreur lors du chargement des films par genre');
     }
   }
 }
