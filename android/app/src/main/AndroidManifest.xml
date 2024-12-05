@@ -8,7 +8,7 @@
     </queries>
 
     <application
-        android:label="filma"
+        android:label="Filma"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

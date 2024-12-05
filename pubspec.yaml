@@ -1,4 +1,4 @@
-name: filma
+name: Filma
 description: Une application Flutter pour gérer et afficher des films.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
