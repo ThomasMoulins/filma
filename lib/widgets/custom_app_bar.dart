@@ -57,7 +57,7 @@ class CustomAppBarState extends State<CustomAppBar> {
       elevation: 0,
       leading: Padding(
         padding: const EdgeInsets.only(left: 16.0),
-        child: Image.asset('assets/logo.png', height: 40),
+        child: Image.asset('assets/icon.png', height: 40),
       ),
       title: SizedBox(
         height: 40,
