@@ -103,7 +103,13 @@ class MovieDetailsPageState extends State<MovieDetailsPage> {
             expandedHeight: 300.0,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(widget.movie.title),
+              title: Text(
+                widget.movie.title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               background: Stack(
                 fit: StackFit.expand,
                 children: [

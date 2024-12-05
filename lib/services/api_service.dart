@@ -56,12 +56,12 @@ class ApiService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getGenreList() async {
+  Future<List<dynamic>> getGenreList() async {
     final response = await http.get(Uri.parse('$_baseUrl/genre/movie/list?api_key=$TMDB_API_KEY&language=fr-FR'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return List<Map<String, dynamic>>.from(data['genres']);
+      return data['genres'];
     } else {
       throw Exception('Erreur lors de la récupération des genres');
     }

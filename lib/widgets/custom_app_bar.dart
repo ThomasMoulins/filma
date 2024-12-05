@@ -1,7 +1,7 @@
-// lib/widgets/custom_app_bar.dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import './custom_search_bar.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String) onSearchChanged;
@@ -42,7 +42,6 @@ class CustomAppBarState extends State<CustomAppBar> {
       if (kDebugMode) {
         print('Erreur lors de la récupération des catégories : $e');
       }
-      // Gérer l'erreur selon vos besoins, par exemple en affichant un message à l'utilisateur
     } finally {
       setState(() {
         _isLoadingCategories = false;
@@ -98,7 +97,7 @@ class CustomAppBarState extends State<CustomAppBar> {
   void _showCategoriesDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent, // Pour un effet de coins arrondis
+      backgroundColor: Colors.transparent,
       builder: (context) {
         if (_isLoadingCategories) {
           return const Center(child: CircularProgressIndicator());
@@ -130,7 +129,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                 const Text(
                   'Catégories',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -139,7 +138,7 @@ class CustomAppBarState extends State<CustomAppBar> {
                   child: SingleChildScrollView(
                     child: Wrap(
                       spacing: 10,
-                      runSpacing: 10,
+                      runSpacing: 1,
                       children: _categories.map((category) {
                         String categoryName = category['name'];
                         return ElevatedButton(
