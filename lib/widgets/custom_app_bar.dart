@@ -23,7 +23,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class CustomAppBarState extends State<CustomAppBar> {
-  List<Map<String, dynamic>> _categories = [];
+  List<dynamic> _categories = [];
   bool _isLoadingCategories = false;
 
   @override
@@ -58,30 +58,9 @@ class CustomAppBarState extends State<CustomAppBar> {
         padding: const EdgeInsets.only(left: 16.0),
         child: Image.asset('assets/icon.png', height: 40),
       ),
-      title: SizedBox(
-        height: 40,
-        child: TextField(
-          controller: widget.searchController,
-          onChanged: (value) {
-            widget.onSearchChanged(value);
-          },
-          decoration: InputDecoration(
-            hintText: 'Rechercher des films...',
-            hintStyle: TextStyle(color: Colors.grey[500]),
-            prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
-            filled: true,
-            fillColor: Colors.grey[200],
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[400]!),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey[200]!),
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-        ),
+      title: CustomSearchBar(
+        searchController: widget.searchController,
+        onSearchChanged: widget.onSearchChanged,
       ),
       actions: [
         IconButton(
