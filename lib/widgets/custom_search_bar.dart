@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController searchController;
   final Function(String) onSearchChanged;
+  final Function(bool) onModeChanged;
 
   const CustomSearchBar({
     super.key,
     required this.searchController,
     required this.onSearchChanged,
+    required this.onModeChanged,
   });
 
   @override
@@ -33,6 +35,7 @@ class CustomSearchBarState extends State<CustomSearchBar> {
               setState(() {
                 isFilmMode = !isFilmMode;
               });
+              widget.onModeChanged(isFilmMode);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),

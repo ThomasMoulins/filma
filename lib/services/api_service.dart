@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../api_keys.dart';
 import '../models/movie.dart';
+import '../models/person.dart';
 
 class ApiService {
   final String _baseUrl = 'https://api.themoviedb.org/3';
@@ -103,4 +104,33 @@ class ApiService {
       throw Exception('Erreur lors du chargement des films par genre');
     }
   }
+}
+
+  Future<List<Person>> searchPeople(String query) async {
+    final response = await http.get(Uri.parse('$_baseUrl/search/person?api_key=$TMDB_API_KEY&language=fr-FR&query=$query&include_adult=true'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<Person> people = (data['results'] as List).map((personJson) => Person.fromJson(personJson)).toList();
+      return people;
+    } else {
+      throw Exception('Erreur lors de la recherche de personnes');
+    }
+  }
+
+
+  Future<List<Movie>> fetchPersonMovies(int personId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/person/$personId/movie_credits?api_key=$TMDB_API_KEY&language=fr-FR'));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<Movie> movies = (data['cast'] as List)
+          .map((movieJson) => Movie.fromJson(movieJson))
+          .toList();
+      return movies;
+    } else {
+      throw Exception('Erreur lors de la récupération des films de la personne');
+    }
+  }
+
 }

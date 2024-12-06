@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../models/person.dart';
 import '../widgets/custom_app_bar.dart';
 import '../services/api_service.dart';
 import '../models/movie.dart';
 import '../widgets/movie_list.dart';
+import '../widgets/person_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +16,8 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   List<Movie> movies = [];
+  List<Person> people = [];
+  bool _isFilmMode = true;
   final TextEditingController _searchController = TextEditingController();
   Timer? _debounce;
 
@@ -30,24 +34,49 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void _onModeChanged(bool isFilmMode) {
+    setState(() {
+      _isFilmMode = isFilmMode;
+      _searchController.clear();
+      if (_isFilmMode) {
+        _loadMovies();
+      } else {
+        movies = [];
+        people = [];
+      }
+    });
+  }
+
+
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       if (query.isEmpty) {
-        // Si la recherche est vide, charger les films populaires
-        _loadMovies();
+        if (_isFilmMode) {
+          _loadMovies();
+        } else {
+          setState(() {
+            people = [];
+          });
+        }
       } else {
-        // Sinon, effectuer la recherche
-        List<Movie> searchedMovies = await ApiService().searchMovies(query);
-        setState(() {
-          movies = searchedMovies;
-        });
+        if (_isFilmMode) {
+          List<Movie> searchedMovies = await ApiService().searchMovies(query);
+          setState(() {
+            movies = searchedMovies;
+          });
+        } else {
+          List<Person> searchedPeople = await ApiService().searchPeople(query);
+          setState(() {
+            people = searchedPeople;
+          });
+        }
       }
     });
   }
 
-  void _selectCategory(String category) async {
+  void _onCategorySelect(String category) async {
     List<Movie> categoryMovies = await ApiService().fetchMoviesByCategory(category);
     setState(() {
       movies = categoryMovies;
@@ -65,11 +94,16 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        onSearchChanged: _onSearchChanged,
+        onModeChanged: _onModeChanged,
+        onCategorySelected: _onCategorySelect,
         searchController: _searchController,
         onSearchChanged: _onSearchChanged,
         onCategorySelected: _selectCategory,
       ),
-      body: MovieList(movies: movies),
+      body: _isFilmMode
+          ? MovieList(movies: movies)
+          : PersonList(people: people)
     );
   }
 }

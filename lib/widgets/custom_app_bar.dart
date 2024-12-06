@@ -5,12 +5,14 @@ import './custom_search_bar.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String) onSearchChanged;
+  final Function(bool) onModeChanged;
   final Function(String) onCategorySelected;
   final TextEditingController searchController;
 
   const CustomAppBar({
     super.key,
     required this.onSearchChanged,
+    required this.onModeChanged,
     required this.onCategorySelected,
     required this.searchController,
   });
@@ -61,6 +63,7 @@ class CustomAppBarState extends State<CustomAppBar> {
       title: CustomSearchBar(
         searchController: widget.searchController,
         onSearchChanged: widget.onSearchChanged,
+        onModeChanged: widget.onModeChanged,
       ),
       actions: [
         IconButton(
