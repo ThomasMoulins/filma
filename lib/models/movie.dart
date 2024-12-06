@@ -5,7 +5,7 @@ class Movie {
   final String posterPath;
   final DateTime? releaseDate;
   final double rating;
-  final List<dynamic> genreIds;
+  final List<int> genreIds;
 
   Movie({
     required this.id,
@@ -30,7 +30,7 @@ class Movie {
       posterPath: json['poster_path'] ?? '',
       releaseDate: parsedReleaseDate,
       rating: (json['vote_average'] as num).toDouble(),
-      genreIds: List<dynamic>.from(json['genre_ids'] ?? []),
+      genreIds: List<int>.from(json['genre_ids'] ?? []),
     );
   }
 }
