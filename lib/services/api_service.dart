@@ -19,7 +19,7 @@ class ApiService {
   }
 
   Future<List<Movie>> searchMovies(String query) async {
-    final response = await http.get(Uri.parse('$_baseUrl/search/movie?api_key=$TMDB_API_KEY&language=fr-FR&query=$query'));
+    final response = await http.get(Uri.parse('$_baseUrl/search/movie?api_key=$TMDB_API_KEY&language=fr-FR&query=$query&include_adult=true'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
