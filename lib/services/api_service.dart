@@ -104,7 +104,30 @@ class ApiService {
       throw Exception('Erreur lors du chargement des films par genre');
     }
   }
-}
+
+  Future<List<Movie>> fetchMoviesByCompany(String companyId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/discover/movie?api_key=$TMDB_API_KEY&with_companies=$companyId'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      List<Movie> movies = (data['results'] as List)
+          .map((movieJson) => Movie.fromJson(movieJson))
+          .toList();
+
+      // Trier les films par date de sortie décroissante (optionnel)
+      movies.sort((a, b) {
+        DateTime dateA = a.releaseDate ?? DateTime(1900);
+        DateTime dateB = b.releaseDate ?? DateTime(1900);
+        return dateB.compareTo(dateA);
+      });
+
+      return movies;
+    } else {
+      throw Exception('Erreur lors de la récupération des films de la compagnie');
+    }
+  }
 
   Future<List<Person>> searchPeople(String query) async {
     final response = await http.get(Uri.parse('$_baseUrl/search/person?api_key=$TMDB_API_KEY&language=fr-FR&query=$query&include_adult=true'));

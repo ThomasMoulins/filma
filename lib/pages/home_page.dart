@@ -83,6 +83,14 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void _onCompanySelected(String companyId) async {
+    // Récupérer les films de la compagnie
+    List<Movie> companyMovies = await ApiService().fetchMoviesByCompany(companyId);
+    setState(() {
+      movies = companyMovies;
+    });
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -97,9 +105,8 @@ class HomePageState extends State<HomePage> {
         onSearchChanged: _onSearchChanged,
         onModeChanged: _onModeChanged,
         onCategorySelected: _onCategorySelect,
+        onCompanySelected: _onCompanySelected,
         searchController: _searchController,
-        onSearchChanged: _onSearchChanged,
-        onCategorySelected: _selectCategory,
       ),
       body: _isFilmMode
           ? MovieList(movies: movies)
