@@ -74,7 +74,7 @@ class MovieList extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'Sortie: ${movie.releaseDate}',
+                        movie.releaseDate != null ? '${movie.releaseDate!.toLocal().day.toString().padLeft(2, '0')}/${movie.releaseDate!.toLocal().month.toString().padLeft(2, '0')}/${movie.releaseDate!.toLocal().year}' : 'Date inconnue',
                         style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                       const SizedBox(height: 5),

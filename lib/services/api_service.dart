@@ -12,6 +12,14 @@ class ApiService {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       List<Movie> movies = (data['results'] as List).map((movieJson) => Movie.fromJson(movieJson)).toList();
+
+      // Trier les films par date de sortie décroissante
+      movies.sort((a, b) {
+        DateTime dateA = a.releaseDate ?? DateTime(1900);
+        DateTime dateB = b.releaseDate ?? DateTime(1900);
+        return dateB.compareTo(dateA);
+      });
+
       return movies;
     } else {
       throw Exception('Erreur lors du chargement des films populaires');

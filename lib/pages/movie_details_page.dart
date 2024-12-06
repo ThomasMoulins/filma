@@ -155,7 +155,7 @@ class MovieDetailsPageState extends State<MovieDetailsPage> {
                       const Icon(Icons.calendar_today, color: Colors.black45, size: 16),
                       const SizedBox(width: 5),
                       Text(
-                        widget.movie.releaseDate,
+                        widget.movie.releaseDate != null ? '${widget.movie.releaseDate!.toLocal().day.toString().padLeft(2, '0')}/${widget.movie.releaseDate!.toLocal().month.toString().padLeft(2, '0')}/${widget.movie.releaseDate!.toLocal().year}' : 'Date inconnue',
                         style: const TextStyle(color: Colors.black45),
                       ),
                       const SizedBox(width: 20),
