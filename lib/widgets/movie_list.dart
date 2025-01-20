@@ -19,10 +19,10 @@ class MovieList extends StatelessWidget {
         : GridView.builder(
       padding: const EdgeInsets.all(10),
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 150, // Largeur maximale de chaque élément
+        maxCrossAxisExtent: 200, // Largeur maximale de chaque élément
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.7, // Rapport hauteur/largeur
+        childAspectRatio: 0.5, // Rapport hauteur/largeur
       ),
       itemCount: movies.length,
       itemBuilder: (context, index) {
