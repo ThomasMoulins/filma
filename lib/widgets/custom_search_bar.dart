@@ -63,8 +63,8 @@ class CustomSearchBarState extends State<CustomSearchBar> {
                 },
                 decoration: InputDecoration(
                   hintText: isFilmMode
-                      ? 'Rechercher des films ...'
-                      : 'Rechercher des personnes ...',
+                      ? 'Films ...'
+                      : 'Personnes ...',
                   hintStyle: TextStyle(color: Colors.grey[500]!),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.only(left: 10, bottom: 5),
