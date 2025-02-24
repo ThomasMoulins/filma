@@ -1,15 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/movie.dart';
 import '../pages/movie_details_page.dart';
 
-class MovieList extends StatelessWidget {
+class MovieList extends StatefulWidget {
   final List<Movie> movies;
 
   const MovieList({super.key, required this.movies});
 
   @override
+  _MovieListState createState() => _MovieListState();
+}
+
+class _MovieListState extends State<MovieList> {
+  double maxCrossAxisExtent = 200;
+  double crossAxisSpacing = 40;
+  bool isLoadingConfig = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConfig();
+  }
+
+  Future<void> _loadConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      maxCrossAxisExtent = prefs.getDouble('maxCrossAxisExtent') ?? 200;
+      crossAxisSpacing = prefs.getDouble('crossAxisSpacing') ?? 40;
+      isLoadingConfig = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return movies.isEmpty
+    if (isLoadingConfig) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return widget.movies.isEmpty
         ? const Center(
       child: Text(
         'Aucun film trouvé',
@@ -18,15 +46,15 @@ class MovieList extends StatelessWidget {
     )
         : GridView.builder(
       padding: const EdgeInsets.all(10),
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200, // Largeur maximale de chaque élément
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 0.5, // Rapport hauteur/largeur
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: maxCrossAxisExtent,
+        crossAxisSpacing: crossAxisSpacing,
+        mainAxisSpacing: crossAxisSpacing,
+        childAspectRatio: 0.5,
       ),
-      itemCount: movies.length,
+      itemCount: widget.movies.length,
       itemBuilder: (context, index) {
-        Movie movie = movies[index];
+        Movie movie = widget.movies[index];
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -44,7 +72,7 @@ class MovieList extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Image du film
+                // Affichage de l'image du film
                 Expanded(
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
@@ -74,7 +102,9 @@ class MovieList extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        movie.releaseDate != null ? '${movie.releaseDate!.toLocal().day.toString().padLeft(2, '0')}/${movie.releaseDate!.toLocal().month.toString().padLeft(2, '0')}/${movie.releaseDate!.toLocal().year}' : 'Date inconnue',
+                        movie.releaseDate != null
+                            ? '${movie.releaseDate!.toLocal().day.toString().padLeft(2, "0")}/${movie.releaseDate!.toLocal().month.toString().padLeft(2, "0")}/${movie.releaseDate!.toLocal().year}'
+                            : 'Date inconnue',
                         style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                       const SizedBox(height: 5),
