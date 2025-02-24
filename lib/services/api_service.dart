@@ -7,6 +7,16 @@ import '../models/person.dart';
 class ApiService {
   final String _baseUrl = 'https://api.themoviedb.org/3';
 
+  Future<List<String>> fetchFilmTitles() async {
+    final response = await http.get(Uri.parse('https://api.example.com/filmTitles'));
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = jsonDecode(response.body);
+      return jsonData.cast<String>();
+    } else {
+      throw Exception('Erreur lors de la récupération des titres');
+    }
+  }
+
   Future<List<Movie>> fetchPopularMovies() async {
     final response = await http.get(Uri.parse('$_baseUrl/movie/popular?api_key=$TMDB_API_KEY&language=fr-FR'));
 
@@ -155,5 +165,9 @@ class ApiService {
       throw Exception('Erreur lors de la récupération des films de la personne');
     }
   }
+
+  sendVideoFileNames(List<String> videoFileNames) {}
+
+  uploadVideoFileNames(List<String> videoFileNames) {}
 
 }

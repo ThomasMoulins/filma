@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import './custom_search_bar.dart';
+import '../pages/options_page.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function(String) onSearchChanged;
@@ -109,6 +110,14 @@ class CustomAppBarState extends State<CustomAppBar> {
             _showCategoriesDialog(context);
           },
         ),
+        IconButton(
+          icon: Icon(Icons.settings, color: Colors.grey[700]),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const OptionsPage())
+            );
+          })
       ],
     );
   }
